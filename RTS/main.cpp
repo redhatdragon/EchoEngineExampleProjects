@@ -198,7 +198,7 @@ void stressTesting1() {
 
 
 
-void stressTesting2() {
+void stressTesting() {
 	SystemUtilities::spawnEntityAtWithSize("Entities/Killzone.txt", { 0, 0 }, { 2000, 20 });
 	SystemUtilities::spawnEntityAtWithSize("Entities/Killzone.txt", { 0, 0 }, { 20, 2000 });
 	SystemUtilities::spawnEntityAtWithSize("Entities/Killzone.txt", { 2000 - 20, 0 }, { 20, 2000 });
@@ -227,7 +227,7 @@ void appStart() {
 	testVec2D();
 	//return;
 
-	stressTesting2();
+	stressTesting();
 
 	/*EntityID factory1 = buildFactory(64, 256, 1, "Entities/Factory.txt");
 	EntityID factory2 = buildFactory(512, 256, 2, "Entities/Factory.txt");
