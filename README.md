@@ -4,7 +4,7 @@
 # Instilation
 NOTE: only tested on windows in VS at the moment...
 
-*Simply got into any subdirectory example RTS
+*Simply go into any subdirectory example RTS
 
 *Run setup.bat
 
