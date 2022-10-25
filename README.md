@@ -2,11 +2,17 @@
  Example WIP projects showcasing EchoEngine
 
 # Instilation
-NOTES: only tested on windows at the moment...
+NOTE: only tested on windows in VS at the moment...
+
 *Simply got into any subdirectory example RTS
+
 *Run setup.bat
+
 *Run cmakelists.txt through whatever method desired under
 any architecture desired
+
     -For VS you can just open the directory in VS,
+
      right click cmakelists.txt, change cmake settings,
+     
      then right click cmakelists.txt again and build/debug.
