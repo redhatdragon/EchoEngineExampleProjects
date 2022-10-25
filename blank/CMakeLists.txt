@@ -21,17 +21,7 @@ target_link_libraries(app
 
 add_custom_command(TARGET app POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_BINARY_DIR}/deps/EchoEngine/deps/SDL2/${CMAKE_BUILD_TYPE}"
-        $<TARGET_FILE_DIR:app>/../
-)
-add_custom_command(TARGET app POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_BINARY_DIR}/deps/EchoEngine/deps/SDL2_image/${CMAKE_BUILD_TYPE}"
-        $<TARGET_FILE_DIR:app>/../
-)
-add_custom_command(TARGET app POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_BINARY_DIR}/deps/EchoEngine/deps/SDL2_ttf/${CMAKE_BUILD_TYPE}"
+        "${CMAKE_BINARY_DIR}/deps/EchoEngine/${CMAKE_BUILD_TYPE}"
         $<TARGET_FILE_DIR:app>/../
 )
 add_custom_command(TARGET app POST_BUILD
