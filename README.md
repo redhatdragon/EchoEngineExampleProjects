@@ -4,11 +4,11 @@
 # Instilation
 NOTE: only tested on windows in VS at the moment...
 
-*Simply go into any subdirectory example RTS
+* Simply go into any subdirectory example RTS
 
-*Run setup.bat
+* Run setup.bat
 
-*Run cmakelists.txt through whatever method desired under
+* Run cmakelists.txt through whatever method desired under
 any architecture desired
 
     -For VS you can just open the directory in VS,
