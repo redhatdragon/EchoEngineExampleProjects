@@ -6,7 +6,7 @@
 
 extern DDECS<24, 100008> ecs;
 extern PhysicsEngine<512 / 2, 512 / 2, 128> physics;
-extern Pathfinding<512 * 2, 512 * 2, 32> pathfinding;
+//extern Pathfinding<512 * 2, 512 * 2, 32> pathfinding;
 
 #include "SystemDeath.h"
 #include "SystemDisplay.h"

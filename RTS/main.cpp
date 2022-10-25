@@ -12,12 +12,12 @@
 DDECS<24, 100008> ecs;
 //PhysicsEngine<2000, 2000, 128> physics;
 PhysicsEngine<512/2, 512/2, 128> physics;
-Pathfinding<512*2, 512*2, 32> pathfinding;
+//Pathfinding<512*2, 512*2, 32> pathfinding;
 
 constexpr uint32_t sizeOfECS = sizeof(ecs);
 constexpr uint32_t sizeOfPhysics = sizeof(physics);
-constexpr uint32_t sizeOfPathfinding = sizeof(pathfinding);
-constexpr uint32_t bytesUsed = sizeOfECS + sizeOfPhysics + sizeOfPathfinding;
+//constexpr uint32_t sizeOfPathfinding = sizeof(pathfinding);
+//constexpr uint32_t bytesUsed = sizeOfECS + sizeOfPhysics + sizeOfPathfinding;
 
 
 
@@ -161,8 +161,8 @@ void addQueToFactory(EntityID entity, Name quePath) {
 
 
 void stressTesting1() {
-	testFlatFlaggedBuffer();
-	testFixedPoint();
+	//testFlatFlaggedBuffer();
+	//testFixedPoint();
 	ComponentID bodyComponentID = ecs.registerComponent("body", sizeof(BodyID));
 	ComponentID textureComponentID = ecs.registerComponent("texture", sizeof(TextureID));
 	ComponentID healthComponentID = ecs.registerComponent("health", sizeof(SystemUtilities::Health));
@@ -204,7 +204,7 @@ void stressTesting2() {
 	SystemUtilities::spawnEntityAtWithSize("Entities/Killzone.txt", { 2000 - 20, 0 }, { 20, 2000 });
 	SystemUtilities::spawnEntityAtWithSize("Entities/Killzone.txt", { 0, 2000 - 20 }, { 2000, 20 });
 
-	for (uint32_t i = 0; i < 1000; i++) {
+	for (uint32_t i = 0; i < 100; i++) {
 		EntityID factory1 = buildFactory(64, 256 + i * 52, 1, "Entities/Factory.txt");
 		EntityID factory2 = buildFactory(512, 256 + i * 52, 2, "Entities/Factory.txt");
 		setFactoryWaypoint(factory1, (512 - 64) / 2, 256);
