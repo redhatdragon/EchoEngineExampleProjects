@@ -1,6 +1,7 @@
 #pragma once
 
 #include <IO_API/IO_API.h>
+#define USE_CONVEX
 #include "Systems/Systems.h"
 #include <profiler.h>
 #include <Asset.h>
@@ -8,24 +9,55 @@
 #include "Systems//SystemUtilities.h"
 #include  <FixedPoint.h>
 #include <EntityObjectLoader.h>
+#include <PhysicsEngineConvex2D.h>
 
 DDECS<24, 100008> ecs;
-//PhysicsEngine<2000, 2000, 128> physics;
-PhysicsEngine<512/2, 512/2, 128> physics;
-Pathfinding<512*2, 512*2, 32> pathfinding;
-VoxelWorld voxelWorld;
+PhysicsEngineConvex2D<512 / 2, 512 / 2, 128> physics;
 
 constexpr uint32_t sizeOfECS = sizeof(ecs);
 constexpr uint32_t sizeOfPhysics = sizeof(physics);
-constexpr uint32_t sizeOfPathfinding = sizeof(pathfinding);
-constexpr uint32_t sizeOfVoxelWorld = sizeof(voxelWorld);
-constexpr uint32_t bytesUsed = sizeOfECS + sizeOfPhysics + sizeOfPathfinding + sizeOfVoxelWorld;
 
 
 
-void stressTesting1() {
-	testFlatFlaggedBuffer();
-	testFixedPoint();
+bool componentExistsErrorCheck(EntityObject& eo, const std::string& componentName, const std::string& errorLocation,
+	ComponentObject::TYPE type, uint32_t arraySize = 0) {
+	ComponentObject* c = eo.getComponent(componentName);
+	if (c == nullptr) {
+		std::string errorMsg = "Error: ";
+		errorMsg += errorLocation;
+		errorMsg += " didn't have a ";
+		errorMsg += componentName;
+		errorMsg += " component.";
+		std::cout << errorMsg << std::endl;
+		return false;
+	}
+	if (c->type != type) {
+		std::string errorMsg = "Error: ";
+		errorMsg += errorLocation;
+		errorMsg += " ";
+		errorMsg += componentName;
+		errorMsg += " component isn't of type ";
+		errorMsg += c->typeAsString();
+		std::cout << errorMsg << std::endl;
+		return false;
+	}
+	if (c->type == ComponentObject::TYPE::TYPE_ARRAY) {
+		if (c->getArrayIntLen() != arraySize) {
+			std::string errorMsg = "Error: ";
+			errorMsg += errorLocation;
+			errorMsg += " ";
+			errorMsg += componentName;
+			errorMsg += " oes not have correct number of elements.";
+			std::cout << errorMsg << std::endl;
+			return false;
+		}
+	}
+	return true;
+}
+
+
+
+void stressTest() {
 	ComponentID bodyComponentID = ecs.registerComponent("body", sizeof(BodyID));
 	ComponentID textureComponentID = ecs.registerComponent("texture", sizeof(TextureID));
 	ComponentID healthComponentID = ecs.registerComponent("health", sizeof(SystemUtilities::Health));
@@ -65,17 +97,11 @@ void appStart() {
 	profileLinesStart();
 	initSystems();
 	profileLinesEnd();
-	//stressTesting1();
-	//testFixedPoint();
-	//testVec2D();
-	//return;
 
-
-
+	stressTest();
 	EntityID camEntity = ecs.getNewEntity();
 	unsigned int width, height;
 	getCanvasSize(&width, &height);
-	SystemUtilities::spawnEntityAt("Entities/Player.txt", { width / 2 - 200, height / 2 });
 }
 
 void appLoop() {

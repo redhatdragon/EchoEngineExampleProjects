@@ -1,12 +1,18 @@
 #pragma once
 
 #include <DDECS.h>
-#include <PhysicsEngineAABB.h>
 #include "Pathfinding.h"
 
 extern DDECS<24, 100008> ecs;
-extern PhysicsEngine<512 / 2, 512 / 2, 128> physics;
-//extern Pathfinding<512 * 2, 512 * 2, 32> pathfinding;
+#ifdef USE_AABB
+#include <PhysicsEngineAABB2D.h>
+extern PhysicsEngineAABB2D<512 / 2, 512 / 2, 128> physics;
+#elif defined(USE_CONVEX)
+#include <PhysicsEngineConvex2D.h>
+extern PhysicsEngineConvex2D<512 / 2, 512 / 2, 128> physics;
+#else
+#error "didn't define either USE_AABB nor USE_CONVEX"
+#endif
 
 #include "SystemDeath.h"
 #include "SystemDisplay.h"

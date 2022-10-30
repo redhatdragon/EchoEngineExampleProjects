@@ -1,6 +1,7 @@
 #pragma once
 
 #include <IO_API/IO_API.h>
+#define USE_AABB
 #include "Systems/Systems.h"
 #include <profiler.h>
 #include <Asset.h>
@@ -10,7 +11,7 @@
 #include <EntityObjectLoader.h>
 
 DDECS<24, 100008> ecs;
-PhysicsEngine<512/2, 512/2, 128> physics;
+PhysicsEngineAABB2D<512/2, 512/2, 128> physics;
 
 constexpr uint32_t sizeOfECS = sizeof(ecs);
 constexpr uint32_t sizeOfPhysics = sizeof(physics);
