@@ -2,12 +2,11 @@
 
 #include <IO_API/IO_API.h>
 #define USE_AABB
-#include "Systems/Systems.h"
+#include "Systems/2DExample/Systems.h"
 #include <profiler.h>
 #include <Asset.h>
 #include <iostream>
-#include "Systems//SystemUtilities.h"
-#include  <FixedPoint.h>
+#include <FixedPoint.h>
 #include <EntityObjectLoader.h>
 
 DDECS<24, 100008> ecs;
