@@ -27,13 +27,13 @@ IF (WIN32)
 	add_custom_command(TARGET APP_NAME POST_BUILD
 		COMMAND xcopy /s /d /y 
 			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
-			"\"${CMAKE_BINARY_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data/*\""
 	)
 ELSE()
 	add_custom_command(TARGET APP_NAME POST_BUILD
 		COMMAND cp -u 
 			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
-			"\"${CMAKE_BINARY_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data/*\""
 	)
 ENDIF()
 
