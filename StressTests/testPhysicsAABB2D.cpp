@@ -1,7 +1,6 @@
 #pragma once
 
 #include <IO_API/IO_API.h>
-#define USE_AABB
 #include "ExampleSystems/2DExample/Systems.h"
 #include <profiler.h>
 #include <Asset.h>
