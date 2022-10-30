@@ -1,0 +1,5 @@
+IF (WIN32)
+  set(COPY_COMMAND "xcopy ${dataSrc} ${dataDest} /s /d")
+ELSE()
+  set(COPY_COMMAND "cp -u ${dataSrc} ${dataDest}")
+ENDIF()

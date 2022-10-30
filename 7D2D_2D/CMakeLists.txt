@@ -1,22 +1,42 @@
-cmake_minimum_required(VERSION 3.19)
-project(7D2D_2D)
+cmake_minimum_required(VERSION 3.9)
 
+set(APP_NAME app)
+project(APP_NAME)
 
-add_executable(7D2D_2D
+add_executable(APP_NAME
 	main.cpp
 )
-target_include_directories(7D2D_2D PRIVATE
+target_include_directories(APP_NAME PRIVATE
 	include
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine/deps
-	#${CMAKE_CURRENT_SOURCE_DIR}/../EchoEngine
-	#${CMAKE_CURRENT_SOURCE_DIR}/../EchoEngine/deps
-	#${CMAKE_CURRENT_SOURCE_DIR}/../EchoEngine/deps/SDL2/include
-)# check if these extra includes are necessary if this directory just had a full copy of EchoEngine
+)
 
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine)
-
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../EchoEngine ${CMAKE_CURRENT_SOURCE_DIR}/EchoEngine)
-target_link_libraries(7D2D_2D
+target_link_libraries(APP_NAME
 	EchoEngine
+)
+
+add_custom_command(TARGET APP_NAME POST_BUILD
+    COMMAND echo Starting copy......
+)
+
+IF (WIN32)
+	add_custom_command(TARGET APP_NAME POST_BUILD
+		COMMAND xcopy /s /d /y 
+			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data\""
+	)
+ELSE()
+	add_custom_command(TARGET APP_NAME POST_BUILD
+		COMMAND cp -u 
+			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data\""
+	)
+ENDIF()
+
+add_custom_command(TARGET APP_NAME POST_BUILD
+    COMMAND echo Finished copy......
 )

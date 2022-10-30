@@ -3,7 +3,7 @@
 #include <DDECS.h>
 #include <PhysicsEngineAABB.h>
 #include "Pathfinding.h"
-#include "Voxel/Voxel.h"
+#include "Voxel2D/Voxel.h"
 
 extern DDECS<24, 100008> ecs;
 extern PhysicsEngine<512 / 2, 512 / 2, 128> physics;
@@ -32,6 +32,6 @@ void initSystems() {
 	ecs.registerSystem<SystemQueSpawn>();
 	ecs.registerSystem<SystemMoveTo>();
 	ecs.registerSystem<SystemUnitAI>();
-	ecs.registerSystem<SystemDestructOnOverlap>();
 	ecs.registerSystem<SystemVoxelPhysics>();
+	ecs.registerSystem<SystemDestructOnOverlap>();
 }

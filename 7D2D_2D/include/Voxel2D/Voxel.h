@@ -2,6 +2,19 @@
 #include <stdint.h>
 #include <FlatBuffer.h>
 
+
+
+/*
+NOTE: in prototype phase, likely volatile API.
+A (not yet but will be) modular voxel+phyyyyysics system??~
+Origan for this 2D variant is bottom left. +x is right and +y is up.
+To use this library impliment getVec2DFromWorldVec2D to convert from
+your coordinate system to this system before using your vectors elsewhere.
+Check constexpr variables to find/modify dimensions.
+*/
+
+
+
 typedef uint16_t VoxelBlockIndex;
 typedef uint16_t VoxelChunkIndex;
 typedef uint8_t VoxelBlockType;
@@ -61,7 +74,7 @@ struct VoxelBlock {
 	}
 
 	inline const VoxelBlockMetaData& getVoxelBlockMetaData() {
-		return {};  //TODO: finish this
+		return voxelBlockMetaData[typeID];
 	}
 	inline bool isAir() {
 		if (typeID)
@@ -74,10 +87,12 @@ struct VoxelBlock {
 };
 struct VoxelChunk {
 	static constexpr uint32_t MAX_WIDTH = 256, MAX_HEIGHT = 256;
+	static constexpr uint32_t MAX_AREA = MAX_WIDTH * MAX_HEIGHT;
 	VoxelBlock blocks[MAX_WIDTH * MAX_HEIGHT];
 };
 struct VoxelWorld {
 	static constexpr uint32_t MAX_WIDTH = 256, MAX_HEIGHT = 1;
+	static constexpr uint32_t MAX_AREA = MAX_WIDTH * MAX_HEIGHT;
 	static constexpr uint32_t MAX_STABILITY_QUE = VoxelChunk::MAX_WIDTH * VoxelChunk::MAX_HEIGHT * 50;
 	static constexpr uint32_t updateWidth = 15;
 	VoxelChunk chunks[MAX_WIDTH * MAX_HEIGHT];
@@ -128,6 +143,10 @@ struct VoxelWorld {
 		return MAX_WIDTH * VoxelChunk::MAX_WIDTH;
 	}
 
+	inline VoxelBlock& getBlockRef(const BlockPos blockPos) {
+		return chunks[blockPos.chunkIndex].blocks[blockPos.blockIndex];
+	}
+
 	inline void placeBlock(const VoxelBlock& block, const Vec2D<uint32_t>& pos);
 	inline void placeBlock(const VoxelBlock& block, BlockPos blockPos);
 	inline void placeBlock(VoxelBlockType typeID, const Vec2D<uint32_t>& pos);
@@ -136,7 +155,17 @@ struct VoxelWorld {
 	inline void removeBlock(const Vec2D<uint32_t>& pos);
 	inline void removeBlock(BlockPos blockPos);
 
-	inline void getVec2DFromWorldVec2D(const Vec2D<uint32_t>& pos);  // USER DEFINED!
+	inline Vec2D<uint32_t> getVecPosFromWorldVecPos(const Vec2D<uint32_t>& pos);  // USER DEFINED!
+	inline Vec2D<uint32_t> getWorldVecPosFromVecPos(const Vec2D<uint32_t>& pos);  // USER DEFINED!
+
+	inline BlockPos getBlockPosFromWorldVecPos(const Vec2D<uint32_t>& worldPos) {
+		Vec2D<uint32_t> localPos = getVecPosFromWorldVecPos(worldPos);
+		return getBlockPosFromVecPos(localPos);
+	}
+	inline Vec2D<uint32_t> getWorldVecPosFromBlockPos(BlockPos blockPos) {
+		Vec2D<uint32_t> localPos = getVecPosFromBlockPos(blockPos);
+		return getWorldVecPosFromVecPos(localPos);
+	}
 
 private:
 	inline BlockPos getBlockPosFromVecPos(const Vec2D<uint32_t>& pos);

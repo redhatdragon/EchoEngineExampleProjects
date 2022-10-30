@@ -4,6 +4,22 @@
 #include <PhysicsEngineAABB.h>
 #include <EntityObjectLoader.h>
 #include <FixedPoint.h>
+#include <Voxel2D/Voxel.h>
+
+Vec2D<uint32_t> VoxelWorld::getVecPosFromWorldVecPos(const Vec2D<uint32_t>& pos) {
+	Vec2D<uint32_t> retValue;
+	retValue.y = -pos.y;
+	retValue.x = pos.x;
+	retValue /= 64;
+	return retValue;
+}
+Vec2D<uint32_t> VoxelWorld::getWorldVecPosFromVecPos(const Vec2D<uint32_t>& pos) {
+	Vec2D<uint32_t> retValue;
+	retValue.y = -pos.y;
+	retValue.x = pos.x;
+	retValue *= 64;
+	return retValue;
+}
 
 namespace SystemUtilities {
 	inline void printDebugError(const std::string& str) {

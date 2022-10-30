@@ -1,41 +1,42 @@
-cmake_minimum_required(VERSION 3.19)
-project(testPhysics)
+cmake_minimum_required(VERSION 3.9)
 
-add_executable(testPhysics
-	testPhysics.cpp
+set(APP_NAME app)
+project(APP_NAME)
+
+add_executable(APP_NAME
+	main.cpp
 )
-
-if (MSVC)
-    set_target_properties(testPhysics PROPERTIES LINK_FLAGS "/PROFILE")
-endif()
-
-target_include_directories(testPhysics PRIVATE
+target_include_directories(APP_NAME PRIVATE
 	include
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine/deps
 )
+
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine)
-target_link_libraries(testPhysics
+target_link_libraries(APP_NAME
 	EchoEngine
 )
 
-add_custom_command(TARGET testPhysics POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_BINARY_DIR}/deps/EchoEngine/deps/SDL2/${CMAKE_BUILD_TYPE}"
-        $<TARGET_FILE_DIR:testPhysics>/../
+add_custom_command(TARGET APP_NAME POST_BUILD
+    COMMAND echo Starting copy......
 )
-add_custom_command(TARGET testPhysics POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_BINARY_DIR}/deps/EchoEngine/deps/SDL2_image/${CMAKE_BUILD_TYPE}"
-        $<TARGET_FILE_DIR:testPhysics>/../
-)
-add_custom_command(TARGET testPhysics POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_BINARY_DIR}/deps/EchoEngine/deps/SDL2_ttf/${CMAKE_BUILD_TYPE}"
-        $<TARGET_FILE_DIR:testPhysics>/../
-)
-add_custom_command(TARGET testPhysics POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/data"
-        $<TARGET_FILE_DIR:testPhysics>/../data
+
+IF (WIN32)
+	add_custom_command(TARGET APP_NAME POST_BUILD
+		COMMAND xcopy /s /d /y 
+			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data\""
+	)
+ELSE()
+	add_custom_command(TARGET APP_NAME POST_BUILD
+		COMMAND cp -u 
+			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data\""
+	)
+ENDIF()
+
+add_custom_command(TARGET APP_NAME POST_BUILD
+    COMMAND echo Finished copy......
 )

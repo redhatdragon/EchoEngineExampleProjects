@@ -41,6 +41,23 @@ public:
 			drawTexture(TextureCodex::get(texID), pos.x+cx, pos.y+cy, siz.x, siz.y);
 		}
 
+		Vec2D<uint32_t> camStart = { cx, cy };
+		Vec2D<uint32_t> camEnd = camStart;
+		camEnd.x += winWidth;
+		camEnd.y += winHeight;
+		BlockPos voxelPosStart = voxelWorld.getBlockPosFromWorldVecPos(camStart);
+		BlockPos voxelPosEnd = voxelWorld.getBlockPosFromWorldVecPos(camEnd);
+
+		for (uint32_t chunkIndex = voxelPosStart.chunkIndex; chunkIndex < voxelPosEnd.chunkIndex; chunkIndex++) {
+			for (uint32_t blockIndex = 0; blockIndex < VoxelChunk::MAX_AREA; blockIndex++) {
+				BlockPos blockPos = { chunkIndex, blockIndex };
+				if (voxelWorld.getBlockRef(blockPos).isAir() == false) {
+					Vec2D<uint32_t> pos = voxelWorld.getWorldVecPosFromBlockPos(blockPos);
+					drawRect(pos.x, pos.y, 64, 64, 255, 125, 65, 255);
+				}
+			}
+		}
+
 		ms = clock() - startTime;
 	}
 	virtual const char* getName() {

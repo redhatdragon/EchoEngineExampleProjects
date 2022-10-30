@@ -1,37 +1,42 @@
-cmake_minimum_required(VERSION 3.19)
-project(EchoLevelEditor)
+cmake_minimum_required(VERSION 3.9)
 
-link_directories(
-	../lib
-)
+set(APP_NAME app)
+project(APP_NAME)
 
-add_executable(EchoLevelEditor 
+add_executable(APP_NAME
 	main.cpp
-	#Systems/systemAI.cpp
-	#Systems/systemDamage.cpp
-	#Systems/systemDead.cpp
-	#Systems/systemDisplay.cpp
-	#Systems/systemPlayer.cpp
-	#Systems/systems.cpp
-	#IO_API/SDL2/ThreadPool.cpp
- "UI/ArrowButton.h" "UI/UIUtility.h" "UI/TextBox.cpp" "UI/ArrowButton.cpp" "UI/TextFieldUint.cpp")
-
-target_include_directories(EchoLevelEditor PRIVATE
-	../include
+)
+target_include_directories(APP_NAME PRIVATE
 	include
+	${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine
+	${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine/deps
 )
 
-target_link_directories(EchoLevelEditor PUBLIC
-	../lib
-	lib
+set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/EchoEngine)
+target_link_libraries(APP_NAME
+	EchoEngine
 )
 
-#target_link_libraries(EchoLevelEditor ../EchoEngine/out/build/x64-Debug/EchoEngine)
-target_link_libraries(EchoLevelEditor
-	x86/EchoEngine
-	x86/SDL2
-	x86/SDL2_image
-	x86/SDL2_ttf
-	x86/SDL2main
+add_custom_command(TARGET APP_NAME POST_BUILD
+    COMMAND echo Starting copy......
 )
-#target_link_libraries(EchoLevelEditor C:/Users/Yuki/source/repos/EchoEngineCmakePort/EchoLevelEditor/EchoEngine)
+
+IF (WIN32)
+	add_custom_command(TARGET APP_NAME POST_BUILD
+		COMMAND xcopy /s /d /y 
+			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data\""
+	)
+ELSE()
+	add_custom_command(TARGET APP_NAME POST_BUILD
+		COMMAND cp -u 
+			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
+			"\"${CMAKE_BINARY_DIR}/data\""
+	)
+ENDIF()
+
+add_custom_command(TARGET APP_NAME POST_BUILD
+    COMMAND echo Finished copy......
+)

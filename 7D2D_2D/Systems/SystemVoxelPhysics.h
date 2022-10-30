@@ -1,6 +1,6 @@
 #include <DDECS.h>
 #include <PhysicsEngineAABB.h>
-#include <Voxel/Voxel.h>
+#include <Voxel2D/Voxel.h>
 #include <iostream>
 
 struct PlaceBlockComponent {
