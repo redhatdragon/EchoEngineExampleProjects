@@ -8,6 +8,7 @@
 #include <iostream>
 #include <FixedPoint.h>
 #include <EntityObjectLoader.h>
+#include <PhysicsEngineConvex2D.h>
 
 DDECS<24, 100008> ecs;
 PhysicsEngineConvex2D<512 / 2, 512 / 2, 128> physics;

@@ -59,25 +59,3 @@ set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}")
 target_link_libraries(testPhysicsChipmunk2d
 	EchoEngine
 )
-
-add_custom_command(TARGET testPhysicsChipmunk2d POST_BUILD
-    COMMAND echo Starting copy......
-)
-
-IF (WIN32)
-	add_custom_command(TARGET testPhysicsChipmunk2d POST_BUILD
-		COMMAND xcopy /s /d /y 
-			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
-			"\"${CMAKE_BINARY_DIR}/data/*\""
-	)
-ELSE()
-	add_custom_command(TARGET testPhysicsChipmunk2d POST_BUILD
-		COMMAND cp -u 
-			"\"${CMAKE_CURRENT_SOURCE_DIR}/data\""
-			"\"${CMAKE_BINARY_DIR}/data/*\""
-	)
-ENDIF()
-
-add_custom_command(TARGET testPhysicsChipmunk2d POST_BUILD
-    COMMAND echo Finished copy......
-)
