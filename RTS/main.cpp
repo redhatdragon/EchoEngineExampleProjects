@@ -1,6 +1,7 @@
 #pragma once
 
-#include <IO_API/IO_API.h>
+//#include <IO_API/IO_API.h>
+#include <HAL/HAL.h>
 #include <profiler.h>
 #include <Asset.h>
 #include <iostream>
@@ -58,7 +59,7 @@ bool componentExistsErrorCheck(EntityObject& eo, const std::string& componentNam
 
 EntityID buildFactory(uint32_t x, uint32_t y, uint32_t team, const std::string& factoryFilepath) {
 	ComponentID bodyComponentID = ecs.registerComponent("body", sizeof(BodyID));
-	std::string dataDir = getDirData();
+	std::string dataDir = EE_getDirData();
 
 	EntityObject entityObject = EntityObjectLoader::createEntityObjectFromFile(dataDir + factoryFilepath);
 	EntityID entity = ecs.getNewEntity();
@@ -167,7 +168,7 @@ void stressTesting1() {
 	ComponentID healthComponentID = ecs.registerComponent("health", sizeof(SystemUtilities::Health));
 	ComponentID damageOnCollisionComponentID = ecs.registerComponent("damageOnCollision", sizeof(SystemUtilities::DamageOnCollision));
 	ComponentID controllerComponentID = ecs.registerComponent("controller", NULL);
-	std::string koishiFilepath = getDirData();
+	std::string koishiFilepath = EE_getDirData();
 	koishiFilepath += "/Textures/Koishi.png";
 	for (uint32_t i = 0; i < 40000; i++) {
 		EntityID entity = ecs.getNewEntity();
@@ -217,14 +218,16 @@ void stressTesting() {
 
 
 
-void appStart() {
+void EE_appStart() {
 	profileLinesStart();
 	initSystems();
 	profileLinesEnd();
 	//stressTesting1();
-	testFixedPoint();
-	testVec2D();
+	//testFixedPoint();
+	//testVec2D();
 	//return;
+
+	EE_setCanvasSize(1024, 768);
 
 	stressTesting();
 
@@ -254,25 +257,26 @@ void appStart() {
 	*/
 	EntityID camEntity = ecs.getNewEntity();
 	unsigned int width, height;
-	getCanvasSize(&width, &height);
+	EE_getCanvasSize(&width, &height);
 	SystemUtilities::spawnEntityAt("Entities/Player.txt", { width / 2 - 200, height / 2 });
 }
 
-void appLoop() {
+void EE_appLoop() {
+	EE_drawBackground(0, 0, 0, 255);
 	ecs.runSystems();
 	auto systemsDebugInfo = ecs.getDebugInfo();
 	int x = 16, y = 16, w = 16;
 	std::string entityCountStr = "EntityCount->";
 	entityCountStr += std::to_string(ecs.getEntityCount());
-	drawText(entityCountStr.c_str(), x, y, w);
+	EE_drawText(entityCountStr.c_str(), x, y, w);
 	y += w + w / 2;
 	for (auto& di : systemsDebugInfo) {
-		drawText(di.c_str(), x, y, w);
+		EE_drawText(di.c_str(), x, y, w);
 		y += w + w / 2;
 	}
 	//drawText(std::to_string(TextureCodex::refCount[1]).c_str(), 600, 200, 16);
 }
 
-void appEnd() {
+void EE_appEnd() {
 
 }
